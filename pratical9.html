@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Personal To-Do List</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+
+    <div class="bg-white w-full max-w-lg p-6 rounded-xl shadow-lg">
+
+        <h1 class="text-3xl font-bold text-center text-blue-700 mb-2">
+            My To-Do List
+        </h1>
+
+        <p class="text-gray-500 text-center mb-6">
+            Organize your daily tasks
+        </p>
+
+        <div class="flex gap-2 mb-5">
+
+            <input
+                type="text"
+                id="taskInput"
+                placeholder="Enter your task..."
+                class="flex-1 min-w-0 border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            >
+
+            <button
+                onclick="addTask()"
+                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                Add
+            </button>
+
+        </div>
+
+        <p id="message" class="text-red-500 text-sm mb-3"></p>
+
+        <ul id="taskList" class="space-y-3"></ul>
+
+        <p id="taskCount" class="text-gray-600 text-sm mt-5 text-center">
+            Total tasks: 0
+        </p>
+
+    </div>
+
+    <script>
+        const taskInput = document.getElementById("taskInput");
+        const taskList = document.getElementById("taskList");
+        const message = document.getElementById("message");
+        const taskCount = document.getElementById("taskCount");
+
+        function addTask() {
+            const taskText = taskInput.value.trim();
+
+            if (taskText === "") {
+                message.textContent = "Please enter a task!";
+                return;
+            }
+
+            message.textContent = "";
+
+            const li = document.createElement("li");
+
+            li.className =
+                "flex items-center justify-between gap-3 bg-gray-50 border rounded-lg p-3";
+
+            const taskName = document.createElement("span");
+            taskName.textContent = taskText;
+            taskName.className = "flex-1 break-words";
+
+            const completeButton = document.createElement("button");
+            completeButton.textContent = "✓";
+            completeButton.title = "Mark as completed";
+            completeButton.className =
+                "bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600";
+
+            completeButton.addEventListener("click", function () {
+                taskName.classList.toggle("line-through");
+                taskName.classList.toggle("text-gray-400");
+
+                if (taskName.classList.contains("line-through")) {
+                    completeButton.textContent = "↩️";
+                    completeButton.title = "Mark as incomplete";
+                } else {
+                    completeButton.textContent = "✓";
+                    completeButton.title = "Mark as completed";
+                }
+            });
+
+            const deleteButton = document.createElement("button");
+            deleteButton.textContent = "Delete";
+            deleteButton.className =
+                "bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600";
+
+            deleteButton.addEventListener("click", function () {
+                li.remove();
+                updateCount();
+            });
+
+            li.appendChild(taskName);
+            li.appendChild(completeButton);
+            li.appendChild(deleteButton);
+
+            taskList.appendChild(li);
+
+            taskInput.value = "";
+            taskInput.focus();
+
+            updateCount();
+        }
+
+        function updateCount() {
+            taskCount.textContent =
+                "Total tasks: " + taskList.children.length;
+        }
+
+        taskInput.addEventListener("keydown", function (event) {
+            if (event.key === "Enter") {
+                addTask();
+            }
+        });
+    </script>
+
+</body>
+</html>
