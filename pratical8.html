@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration Form</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f5ff;
+            margin: 0;
+            padding: 30px 15px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #243b6b;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 6px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #243b6b;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            margin-top: 25px;
+            background: #243b6b;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #18294d;
+        }
+
+        #message {
+            margin-top: 18px;
+            text-align: center;
+            font-weight: bold;
+            line-height: 1.5;
+        }
+
+        .error {
+            color: #d93025;
+        }
+
+        .success {
+            color: #16803c;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Student Registration</h1>
+        <p class="subtitle">Please fill in your details</p>
+
+        <form id="registrationForm">
+
+            <label for="name">Full Name</label>
+            <input type="text" id="name" placeholder="Enter your full name">
+
+            <label for="email">Email Address</label>
+            <input type="text" id="email" placeholder="Enter your email">
+
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Minimum 8 characters">
+
+            <label for="mobile">Mobile Number</label>
+            <input type="text" id="mobile" placeholder="Enter 10-digit mobile number"
+                   maxlength="10" inputmode="numeric">
+
+            <button type="submit">Register</button>
+
+        </form>
+
+        <p id="message" role="status" aria-live="polite"></p>
+
+    </div>
+
+    <script>
+        const form = document.getElementById("registrationForm");
+        const message = document.getElementById("message");
+
+        form.addEventListener("submit", function(event) {
+
+            event.preventDefault();
+
+            const name = document.getElementById("name").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
+            const mobile = document.getElementById("mobile").value.trim();
+
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const mobilePattern = /^[0-9]{10}$/;
+
+            if (name === "" || email === "" ||
+                password === "" || mobile === "") {
+
+                showMessage("Please fill in all fields.", false);
+                return;
+            }
+
+            if (!emailPattern.test(email)) {
+                showMessage("Please enter a valid email address.", false);
+                return;
+            }
+
+            if (password.length < 8) {
+                showMessage("Password must be at least 8 characters long.", false);
+                return;
+            }
+
+            if (!mobilePattern.test(mobile)) {
+                showMessage("Please enter a valid 10-digit mobile number.", false);
+                return;
+            }
+
+            showMessage("Registration successful!", true);
+            form.reset();
+        });
+
+        function showMessage(text, isSuccess) {
+            message.textContent = text;
+            message.className = isSuccess ? "success" : "error";
+        }
+    </script>
+
+</body>
+</html>
